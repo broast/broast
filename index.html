@@ -101,7 +101,7 @@
 	let htmlToAppend = "";
 	
 	for(let i=0; i< minimumRows; i++) {
-		let htmlForRow = `<div class="emojiRow">`;
+		let htmlForRow = `<div class="emojiRow" style="height: ${emojiSize}px">`;
 		for(let j=0; j< minimumColumns; j++) {
 			const emojiHtmlToInsert = getHtmlForEmojiImgTag(getRandomEmojiFileName());
 			htmlForRow += emojiHtmlToInsert;
