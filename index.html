@@ -1,119 +1,201 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>the omega life</title>
-<style>
-	#omegastage
-	{
-		background-color:#000;
-		position:absolute;
-		top:0px;
-		left:0px;
-		width:100%;
-		height:100%;
-		overflow:hidden;
-	}
-	.emojiRow {
-		width:100%;
-		overflow:hidden;		
-	}
-	.emojiRow img {
-		
-	}
-	body
-	{
-		background-color:#000;
-		padding:0px;
-		margin:0px;
-		width:100%;
-		height:100%;
-		overflow:hidden;
-	}
-</style>
-</head>
-<body>
-<div id="omegastage">
-</div>
-<script>	
-	const DefaultOmegaArray = [
-		'5g',
-		'anxiety',
-		'bluedot',
-		'boom',
-		'clusterduck',
-		'crayon',
-		'deletethis',
-		'duck',
-		'eyeshake',
-		'shakeeye',
-		'fire',
-		'hedgeparty',
-		'infinity',
-		'kek',
-		'lol',
-		'nice',
-		'plusthree',
-		'powerup',
-		'powerup2',
-		'siren',
-		'that',
-		'thatthat',
-		'this',
-		'thisthis',
-		'thonk',
-		'true',
-		'ty',
-		'yw',
-		'kris'
-	];
-	
-	const DefaultEmojiSize = 25;
-	 
-	let omegaArray = DefaultOmegaArray;
-	let emojiSize = DefaultEmojiSize;
-	
-	function getQuery(q) {
-	   return (window.location.search.match(new RegExp('[?&]' + q + '=([^&]+)')) || [, null])[1];
-	}
-	
-	function getRandomEmojiFileName() {
-		const randomEmojiIndex = Math.floor(Math.random() * omegaArray.length);
-		return omegaArray[randomEmojiIndex] + ".gif";
-	}
-	
-	function getHtmlForEmojiImgTag(filename) {
-		return `<img src="${filename}" width=${emojiSize} height=${emojiSize}>`;
-	}
-	
-	var customArray = getQuery("omegaArray");
-	var customSize = getQuery("emojiSize");
-	
-	emojiSize = customSize || emojiSize;
-	
-	if(customArray) {
-		omegaArray = customArray.split(',');
-	}
-	
-	const windowHeight = window.innerHeight;
-	const windowWidth = window.innerWidth;
-	
-	const minimumRows = Math.ceil(windowHeight/emojiSize);
-	const minimumColumns = Math.floor(windowWidth/emojiSize);
-	
-	let htmlToAppend = "";
-	
-	for(let i=0; i< minimumRows; i++) {
-		let htmlForRow = `<div class="emojiRow" style="height: ${emojiSize}px">`;
-		for(let j=0; j< minimumColumns; j++) {
-			const emojiHtmlToInsert = getHtmlForEmojiImgTag(getRandomEmojiFileName());
-			htmlForRow += emojiHtmlToInsert;
+	<title>the omega life</title>
+	<style>
+		#omegastage {
+			background-color: #000;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
 		}
-		htmlForRow += '</div>';
-		htmlToAppend += htmlForRow;
-	}	
-	
-	const omegaStage = document.getElementById("omegastage");
-	omegaStage.innerHTML = htmlToAppend;
-</script>
+
+		.emojiRow {
+			width: 100%;
+			overflow: hidden;
+		}
+
+		.emojiRow img {}
+
+		body {
+			background-color: #000;
+			padding: 0px;
+			margin: 0px;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="omegastage">
+	</div>
+	<script>
+		const DefaultOmegaArray = [ // should be in order of brightness for mosaic feature
+			'deletethis',
+			'boom',
+			'5g',
+			'duck',
+			'that',
+			'thatthat',
+			'this',
+			'thisthis',
+			'powerup',
+			'powerup2',
+			'nice',
+			'true',
+			'infinity',
+			'lol',
+			'kris',
+			'kek',
+			'plusthree',
+			'fire',
+			'clusterduck',
+			'anxiety',
+			'siren',
+			'crayon',
+			'thonk',
+			'ty',
+			'yw',
+			'hedgeparty',
+			'bluedot',
+			'eyeshake',
+			'shakeeye',
+		];
+
+		const DefaultEmojiSize = 25;
+
+		let omegaArray = DefaultOmegaArray;
+		let emojiSize = DefaultEmojiSize;
+
+		const omegaStage = document.getElementById("omegastage");
+
+		function getQuery(q) {
+			return (window.location.search.match(new RegExp('[?&]' + q + '=([^&]+)')) || [, null])[1];
+		}
+
+		function getRandomEmoji() {
+			const randomEmojiIndex = Math.floor(Math.random() * omegaArray.length);
+			return omegaArray[randomEmojiIndex];
+		}
+
+		function getHtmlForEmojiImgTag(filename) {
+			return `<img src="${filename}.gif" width=${emojiSize} height=${emojiSize}>`;
+		}
+
+		function drawEmojis(width, height, brightnessValues = null) {
+
+			let htmlToAppend = "";
+
+			for (let i = 0; i < height - 1; i++) {
+				let htmlForRow = `<div class="emojiRow" style="height: ${emojiSize}px">`;
+				for (let j = 0; j < width - 1; j++) {
+					
+					let emojiName = null;
+					if(brightnessValues) {
+						let brightnessInterval = 1.0 / omegaArray.length;
+						let brightnessValue = brightnessValues[i][j];
+						let brightnessIndex = Math.floor(brightnessValue/brightnessInterval);
+						emojiName = omegaArray[brightnessIndex];
+					} else {
+						emojiName = getRandomEmoji();
+					}
+
+					const emojiHtmlToInsert = getHtmlForEmojiImgTag(emojiName);
+					htmlForRow += emojiHtmlToInsert;
+				}
+				htmlForRow += '</div>';
+				htmlToAppend += htmlForRow;
+			}
+
+			omegaStage.innerHTML = htmlToAppend;
+
+		}
+
+		async function getBrightnessValuesFromImage(width, height, imageSrc) {
+			let img = new Image(),
+				canvas = document.createElement("canvas"),
+				ctx = canvas.getContext("2d"),
+				src = imageSrc;
+
+			const loadImage = (url) => new Promise((resolve, reject) => {
+				img.addEventListener('load', () => resolve(img));
+				img.addEventListener('error', (err) => reject(err));
+				img.crossOrigin = "";
+				img.src = url;
+			});
+
+			await loadImage(src);
+
+				canvas.width = width
+				canvas.height = height;
+				ctx.drawImage(img, 0, 0, width, height);
+				var brightnessValues = [];
+				for (let i = 0; i < canvas.height; i++) {
+					var rowOfBrightnessValues = [];
+					for (let j = 0; j < canvas.width; j++) {
+						let imageData = ctx.getImageData(j, i, 1, 1).data;
+						let brightness = rgbBrightness(imageData[0], imageData[1], imageData[2]);
+						rowOfBrightnessValues.push(brightness);
+					}
+					brightnessValues.push(rowOfBrightnessValues);
+				}
+				console.log(brightnessValues);
+
+				omegaStage.appendChild(canvas);
+			
+				return brightnessValues;
+
+
+		}
+
+		// Returns perceived brightness (0-1) of the given 0-255 RGB values
+		// Based on this C++ implementation: https://stackoverflow.com/a/13558570/11950764
+		function rgbBrightness(r, g, b) {
+			let v = 0;
+			v += 0.212655 * ((r / 255) <= 0.04045 ? (r / 255) / 12.92 : Math.pow(((r / 255) + 0.055) / 1.055, 2.4));
+			v += 0.715158 * ((g / 255) <= 0.04045 ? (g / 255) / 12.92 : Math.pow(((g / 255) + 0.055) / 1.055, 2.4));
+			v += 0.072187 * ((b / 255) <= 0.04045 ? (b / 255) / 12.92 : Math.pow(((b / 255) + 0.055) / 1.055, 2.4));
+			return v <= 0.0031308 ? v * 12.92 : 1.055 * Math.pow(v, 1.0 / 2.4) - 0.055;
+		}
+
+		var customArray = getQuery("omegaArray");
+		var customSize = getQuery("emojiSize");
+		var customImage = getQuery("imageUrl");
+
+		emojiSize = customSize || emojiSize;
+
+		if (customArray) {
+			omegaArray = customArray.split(',');
+		}
+
+		const windowHeight = window.innerHeight;
+		const windowWidth = window.innerWidth;
+
+		const minimumRows = Math.ceil(windowHeight / emojiSize);
+		const minimumColumns = Math.floor(windowWidth / emojiSize);
+
+		async function main() {
+			
+			if (customImage) {
+
+				let brightnessValues = await getBrightnessValuesFromImage(minimumColumns, minimumRows, customImage);
+				drawEmojis(minimumColumns, minimumRows, brightnessValues);
+
+			} else {
+
+				drawEmojis(minimumColumns, minimumRows);
+			}
+
+		}
+		main();
+
+	</script>
 </body>
+
 </html>
