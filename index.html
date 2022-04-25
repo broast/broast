@@ -166,23 +166,24 @@
 			return v <= 0.0031308 ? v * 12.92 : 1.055 * Math.pow(v, 1.0 / 2.4) - 0.055;
 		}
 
-		var customArray = getQuery("omegaArray");
-		var customSize = getQuery("emojiSize");
-		var customImage = getQuery("imageUrl");
-
-		emojiSize = customSize || emojiSize;
-
-		if (customArray) {
-			omegaArray = customArray.split(',');
-		}
-
-		const windowHeight = window.innerHeight;
-		const windowWidth = window.innerWidth;
-
-		const minimumRows = Math.ceil(windowHeight / emojiSize);
-		const minimumColumns = Math.floor(windowWidth / emojiSize);
 
 		async function main() {
+			var customArray = getQuery("omegaArray");
+			var customSize = getQuery("emojiSize");
+			var customImage = getQuery("imageUrl");
+
+			emojiSize = customSize || emojiSize;
+
+			if (customArray) {
+				omegaArray = customArray.split(',');
+			}
+
+			const windowHeight = window.innerHeight;
+			const windowWidth = window.innerWidth;
+
+			const minimumRows = Math.ceil(windowHeight / emojiSize);
+			const minimumColumns = Math.floor(windowWidth / emojiSize);
+
 			
 			if (customImage) {
 
@@ -196,6 +197,7 @@
 
 		}
 		main();
+		window.onresize = main;
 
 	</script>
 </body>
