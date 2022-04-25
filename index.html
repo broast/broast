@@ -85,8 +85,9 @@
 		}
 
 		function getHtmlForEmojiImgTag(filename) {
-			return `<img src="${filename}.gif" width=${emojiSize} height=${emojiSize
-						href="?imageUrl=${filename}.gif"}>`;
+			return `<img src="${filename}.gif" width=${emojiSize} height=${emojiSize} 
+						onclick="window.location='?imageUrl=${filename}.gif'"
+						style="cursor: pointer">`;
 		}
 
 		function drawEmojis(width, height, brightnessValues = null) {
